@@ -1,0 +1,11 @@
+{
+  "login": {
+    "welcome": "Welcome back!",
+    "subtitle": "NovinCloud's AdminArea, Access valid just for system admins.",
+    "email":"Email",
+    "password":"Password",
+    "version":"Version:",
+    "loginText":"Login",
+    "inProgressLoginText":"Login ..."
+  }
+}

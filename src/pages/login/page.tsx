@@ -1,26 +1,19 @@
-import {
-  Heading,
-  HStack,
-  IconButton,
-  Input,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Heading, HStack, Input, Text, VStack } from "@chakra-ui/react";
 import { Button } from "@components/ui/button";
-import { useColorMode } from "@components/ui/color-mode";
+import { ColorModeButton } from "@components/ui/color-mode";
 import { Field } from "@components/ui/field";
-import { CiLight } from "react-icons/ci";
-import { CiDark } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import { useSignInMutation } from "@hooks/mutations/auth/useSignInMutation";
 import { useNavigate } from "react-router";
 import { toaster } from "@components/ui/toaster";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "@components/ui/language-switcher";
 
 export default function LoginPage() {
   const version = import.meta.env.PACKAGE_VERSION || "0.0.0";
-  const { colorMode, toggleColorMode } = useColorMode();
   const login = useSignInMutation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   type TFormData = {
     email: string;
@@ -58,6 +51,7 @@ export default function LoginPage() {
               `اطلاعات ورود صحیح نمی‌باشد`,
             type: "error",
           });
+          reset();
         },
       }
     );
@@ -65,14 +59,14 @@ export default function LoginPage() {
 
   return (
     <VStack gap={4} w="full" maxW="sm">
-      <Heading>خوش آمدید</Heading>
-      <Text color="gray.400" fontSize="sm">
-        پنل ادمین ابر نوین، ورود تنها برای مدیران سیستم مجاز می‌باشد.
+      <Heading>{t("login.welcome")}</Heading>
+      <Text color="gray.400" fontSize="xs" textAlign="center">
+        {t("login.subtitle")}
       </Text>
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
         <VStack gap={4}>
           <Field
-            label="ایمیل"
+            label={t("login.email")}
             mt={6}
             invalid={!!errors.email}
             errorText={
@@ -92,7 +86,7 @@ export default function LoginPage() {
             />
           </Field>
           <Field
-            label="رمز عبور"
+            label={t("login.password")}
             invalid={!!errors.password}
             errorText={errors.password?.message}
           >
@@ -106,20 +100,21 @@ export default function LoginPage() {
             w="full"
             type="submit"
             loading={login.isPending}
-            loadingText="در حال ورود ..."
+            loadingText={t("login.inProgressLoginText")}
             disabled={login.isPending}
           >
-            ورود
+            {t("login.loginText")}
           </Button>
         </VStack>
       </form>
-      <HStack w="full" justify="center">
-        <Text opacity={0.2} fontSize="xs">
-          ورژن: {version}
+      <HStack w="full" justify="space-between">
+        <Text opacity={0.2} fontSize="sm">
+          {t("login.version")} {version}
         </Text>
-        <IconButton onClick={toggleColorMode} variant="plain">
-          {colorMode === "dark" ? <CiLight /> : <CiDark />}
-        </IconButton>
+        <HStack>
+          <ColorModeButton />
+          <LanguageSwitcher />
+        </HStack>
       </HStack>
     </VStack>
   );
