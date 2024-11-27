@@ -8,12 +8,14 @@ import { useNavigate } from "react-router";
 import { toaster } from "@components/ui/toaster";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@components/ui/language-switcher";
+import appStore from "@stores/appStore";
 
 export default function LoginPage() {
   const version = import.meta.env.PACKAGE_VERSION || "0.0.0";
   const login = useSignInMutation();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const setTokens = appStore((state) => state.setTokens);
 
   type TFormData = {
     email: string;
@@ -37,18 +39,20 @@ export default function LoginPage() {
       { email: data.email, password: data.password },
       {
         onSuccess({ access_token, id_token, refresh_token }) {
-          localStorage.setItem("@novin_admin/access_token", access_token);
-          localStorage.setItem("@novin_admin/id_token", id_token);
-          localStorage.setItem("@novin_admin/refresh_token", refresh_token);
-          navigate("/");
+          setTokens({
+            accessToken: access_token,
+            refreshToken: refresh_token,
+            idToken: id_token,
+          });
+          navigate("/dashboard");
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onError: (error: any) => {
           toaster.create({
-            title: "خطای ورود",
+            title: t("login.loginError"),
             description:
               error?.response?.data?.error_description ||
-              `اطلاعات ورود صحیح نمی‌باشد`,
+              t("login.invalidCredential"),
             type: "error",
           });
           reset();
@@ -69,17 +73,14 @@ export default function LoginPage() {
             label={t("login.email")}
             mt={6}
             invalid={!!errors.email}
-            errorText={
-              errors.email?.message ||
-              "یک ایمیل معتبر وارد نمایید. برای مثال myname@example.com"
-            }
+            errorText={errors.email?.message || t("login.invalidEmail")}
           >
             <Input
               {...register("email", {
                 pattern: {
                   value:
                     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                  message: "Please enter a valid email",
+                  message: t("login.invalidEmail"),
                 },
               })}
               autoComplete="email"
@@ -92,7 +93,9 @@ export default function LoginPage() {
           >
             <Input
               type="password"
-              {...register("password", { required: "پسورد را وارد نمایید" })}
+              {...register("password", {
+                required: t("login.invalidPassword"),
+              })}
               autoComplete="current-password"
             />
           </Field>

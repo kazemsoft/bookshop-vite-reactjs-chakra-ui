@@ -1,3 +1,4 @@
+import appStore from "@stores/appStore";
 import axios, { InternalAxiosRequestConfig } from "axios";
 import saloonRefreshRestClient from "axios";
 import config from "src/config";
@@ -6,7 +7,7 @@ const restAPI = axios.create();
 const { IAM_URL, PUBLIC_URL } = config;
 
 restAPI.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const id_token = localStorage.getItem("@novin_admin/id_token");
+  const id_token = appStore.getState().idToken;
   !!id_token && (config.headers.Authorization = `Bearer ${id_token}`);
   return config;
 });
@@ -19,7 +20,7 @@ restAPI.interceptors.response.use(
     const originalConfig = error.config;
     if (error?.response?.status === 401 && !originalConfig._retry) {
       originalConfig._retry = true;
-      const refresh_token = localStorage.getItem("@novin_admin/refresh_token");
+      const refresh_token = appStore.getState().refreshToken;
 
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,16 +40,16 @@ restAPI.interceptors.response.use(
             },
           }
         );
-        localStorage.setItem("@novin_admin/access_token", data.access_token);
-        localStorage.setItem("@novin_admin/id_token", data.id_token);
-        localStorage.setItem("@novin_admin/refresh_token", data.refresh_token);
+        appStore.setState((state) => {
+          state.accessToken = data.access_token;
+          state.refreshToken = data.refresh_token;
+          state.idToken = data.id_token;
+        });
         originalConfig.headers["Authorization"] = `Bearer ${data.id_token}`;
 
         return restAPI(originalConfig);
       } catch (e) {
-        localStorage.removeItem("@novin_admin/access_token");
-        localStorage.removeItem("@novin_admin/id_token");
-        localStorage.removeItem("@novin_admin/refresh_token");
+        appStore.getState().logout();
         window.location.href = PUBLIC_URL;
       }
     } else {
@@ -60,7 +61,7 @@ restAPI.interceptors.response.use(
 const iamRestAPI = axios.create();
 
 iamRestAPI.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const access_token = localStorage.getItem("@novin_admin/access_token");
+  const access_token = appStore.getState().accessToken;
   !!access_token && (config.headers.Authorization = `Bearer ${access_token}`);
   config.baseURL = `${IAM_URL}`;
   config.headers["Content-Type"] = "application/x-www-form-urlencoded";
@@ -75,7 +76,7 @@ iamRestAPI.interceptors.response.use(
     const originalConfig = error.config;
     if (error?.response?.status === 401 && !originalConfig._retry) {
       originalConfig._retry = true;
-      const refresh_token = localStorage.getItem("@novin_admin/refresh_token");
+      const refresh_token = appStore.getState().refreshToken;
 
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -95,16 +96,16 @@ iamRestAPI.interceptors.response.use(
             },
           }
         );
-        localStorage.setItem("@novin_admin/access_token", data.access_token);
-        localStorage.setItem("@novin_admin/id_token", data.id_token);
-        localStorage.setItem("@novin_admin/refresh_token", data.refresh_token);
+        appStore.setState((state) => {
+          state.accessToken = data.access_token;
+          state.refreshToken = data.refresh_token;
+          state.idToken = data.id_token;
+        });
         originalConfig.headers["Authorization"] = `Bearer ${data.access_token}`;
 
         return iamRestAPI(originalConfig);
       } catch (e) {
-        localStorage.removeItem("@novin_admin/access_token");
-        localStorage.removeItem("@novin_admin/id_token");
-        localStorage.removeItem("@novin_admin/refresh_token");
+        appStore.getState().logout();
         window.location.href = PUBLIC_URL;
       }
     } else {

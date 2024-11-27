@@ -1,10 +1,14 @@
+import { VStack } from "@chakra-ui/react";
+import useGetMe from "@hooks/queries/useGetMe";
 import { Outlet } from "react-router";
+import AppBar from "./AppBar/AppBar";
 
 export default function DashboardLayout() {
+  const me = useGetMe();
+
   return (
-    <div>
-      <h1>Dashboard Layout:</h1>
-      <Outlet />
-    </div>
+    <VStack w="full" h="full">
+      <AppBar />
+    </VStack>
   );
 }
