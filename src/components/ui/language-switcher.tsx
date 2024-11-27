@@ -1,11 +1,12 @@
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "./menu";
 import { LuGlobe } from "react-icons/lu";
 
-import { IconButton } from "@chakra-ui/react";
+import { HStack, IconButton, Text } from "@chakra-ui/react";
 import { langs } from "src/i18n";
 import { useTranslation } from "react-i18next";
 import appStore from "@stores/appStore";
 import { useColorModeValue } from "./color-mode";
+import ReactCountryFlag from "react-country-flag";
 
 export default function LanguageSwitcher() {
   const { i18n } = useTranslation();
@@ -42,7 +43,10 @@ export default function LanguageSwitcher() {
             bg={i18n.resolvedLanguage === lang ? bgColor : "transparent"}
             cursor="pointer"
           >
-            {langs[lang].nativeName}
+            <HStack>
+              <ReactCountryFlag countryCode={langs[lang].flag} svg />
+              <Text>{langs[lang].nativeName}</Text>
+            </HStack>
           </MenuItem>
         ))}
       </MenuContent>

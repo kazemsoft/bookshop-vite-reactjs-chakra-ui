@@ -19,6 +19,6 @@ i18n
 export default i18n;
 
 export const langs: Record<string, { nativeName: string; flag: string }> = {
-  en: { nativeName: "English", flag: "us" },
+  en: { nativeName: "English", flag: "gb" },
   fa: { nativeName: "پارسی", flag: "ir" },
 };
