@@ -5,30 +5,18 @@ import { immer } from "zustand/middleware/immer";
 const appStore = create<TAppStore>()(
   persist(
     immer<TAppStore>((set) => ({
-      locale: "fa",
-      accessToken: null,
-      refreshToken: null,
-      idToken: null,
-      setTokens: ({ accessToken, refreshToken, idToken }) =>
+      token: "",
+      setTokens: (token) =>
         set((state) => {
-          state.accessToken = accessToken;
-          state.refreshToken = refreshToken;
-          state.idToken = idToken;
+          state.token = token;
         }),
       logout: () =>
         set((state) => {
-          state.accessToken = null;
-          state.refreshToken = null;
-          state.idToken = null;
+          state.token = "";
         }),
-      changeLocale: (locale) => {
-        set((state) => {
-          state.locale = locale;
-        });
-      },
     })),
     {
-      name: "@novin_admin-app",
+      name: "@bookshop",
       storage: createJSONStorage(() => localStorage),
     }
   )

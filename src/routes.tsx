@@ -1,27 +1,17 @@
-import { Navigate, Route, Routes } from "react-router";
-import AuthLayout from "./components/layouts/auth-layout/auth-layout";
-import LoginPage from "./pages/login/page";
-import DashboardLayout from "./components/layouts/dashboard-layout/dashboard-layout";
-import DashboardHomePage from "./pages/dashboard";
-import appStore from "@stores/appStore";
+import { Route, Routes } from "react-router";
+// import appStore from "@stores/appStore";
+import ShopLayout from "@pages/(shop)/layout";
+import ShopHomePage from "@pages/(shop)/page";
+import BookPage from "@pages/(shop)/book/page";
 
 export default function AppRoutes() {
-  const isAuth = appStore((state) => state.accessToken);
+  // const isAuth = appStore((state) => state.token);
   return (
     <Routes>
-      <Route element={isAuth ? <Navigate to="/dashboard" /> : <AuthLayout />}>
-        <Route path="login" element={<LoginPage />} />
+      <Route element={<ShopLayout />}>
+        <Route path="/" element={<ShopHomePage />} />
+        <Route path="book/:bookId" element={<BookPage />} />
       </Route>
-      <Route
-        path="dashboard"
-        element={isAuth ? <DashboardLayout /> : <Navigate to="/login" />}
-      >
-        <Route index element={<DashboardHomePage />} />
-      </Route>
-      <Route
-        path="*"
-        element={<Navigate to={isAuth ? "/dashboard" : "/login"} />}
-      />
     </Routes>
   );
 }

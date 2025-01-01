@@ -295,37 +295,37 @@ export const colors = defineTokens.colors({
   },
   blue: {
     "50": {
-      value: "#eff6ff",
+      value: "#f9f7f4",
     },
     "100": {
-      value: "#dbeafe",
+      value: "#e9dfd2",
     },
     "200": {
-      value: "#bfdbfe",
+      value: "#d6c3ac",
     },
     "300": {
-      value: "#a3cfff",
+      value: "#bfa17d",
     },
     "400": {
-      value: "#60a5fa",
+      value: "#b38e62",
     },
     "500": {
-      value: "#3b82f6",
+      value: "#925e20",
     },
     "600": {
-      value: "#2563eb",
+      value: "#804601",
     },
     "700": {
-      value: "#173da6",
+      value: "#44403c",
     },
     "800": {
-      value: "#1a3478",
+      value: "#6d3b01",
     },
     "900": {
-      value: "#14204a",
+      value: "#4f2b01",
     },
     "950": {
-      value: "#0c142e",
+      value: "#4f2b01",
     },
   },
   cyan: {
@@ -431,6 +431,41 @@ export const colors = defineTokens.colors({
     },
     "950": {
       value: "#2c0514",
+    },
+  },
+  brown: {
+    "50": {
+      value: "#f9f7f4",
+    },
+    "100": {
+      value: "#e9dfd2",
+    },
+    "200": {
+      value: "#d6c3ac",
+    },
+    "300": {
+      value: "#bfa17d",
+    },
+    "400": {
+      value: "#b38e62",
+    },
+    "500": {
+      value: "#925e20",
+    },
+    "600": {
+      value: "#804601",
+    },
+    "700": {
+      value: "#44403c",
+    },
+    "800": {
+      value: "#6d3b01",
+    },
+    "900": {
+      value: "#4f2b01",
+    },
+    "950": {
+      value: "#4f2b01",
     },
   },
   primary: {

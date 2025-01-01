@@ -6,7 +6,7 @@ import {
   Spacer,
   Theme,
 } from "@chakra-ui/react";
-import Logo from "@components/Logo/Logo";
+import Logo from "@components/logo/logo";
 import { ColorModeButton, useColorModeValue } from "@components/ui/color-mode";
 import LanguageSwitcher from "@components/ui/language-switcher";
 import { FaQuestionCircle } from "react-icons/fa";

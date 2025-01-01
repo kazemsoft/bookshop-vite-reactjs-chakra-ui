@@ -1,5 +1,5 @@
 import { VStack } from "@chakra-ui/react";
-import useGetMe from "@hooks/queries/useGetMe";
+import useGetMe from "@hooks/queries/useGetBooks";
 import AppBar from "./AppBar/AppBar";
 
 export default function DashboardLayout() {
