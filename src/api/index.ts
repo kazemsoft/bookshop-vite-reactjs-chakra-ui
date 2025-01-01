@@ -19,7 +19,11 @@ restAPI.interceptors.response.use(
     return response;
   },
   async (error) => {
-    if (error?.response?.status === 401) {
+    const originalRequest = error.config;
+    if (
+      error?.response?.status === 401 &&
+      !originalRequest.url.includes("/auth/login")
+    ) {
       appStore.getState().logout();
       window.location.href = PUBLIC_URL;
     } else {

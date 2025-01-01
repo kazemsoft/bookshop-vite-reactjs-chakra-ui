@@ -7,7 +7,7 @@ import { useColorModeValue } from "@components/ui/color-mode";
 export default function Header() {
   const bgColor = useColorModeValue("#F2EDE6", "#322E2B");
   return (
-    <Box bg={bgColor}>
+    <Box bg={bgColor} w="full">
       <Container maxW="container.xl">
         <Flex py={6} alignItems="center" gap={[4, 4, 8]}>
           <Logo w={["40px", "40px", "80px"]} />

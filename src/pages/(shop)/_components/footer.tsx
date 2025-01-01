@@ -5,7 +5,7 @@ export default function Footer() {
   const bgColor = useColorModeValue("#F2EDE6", "#322E2B");
   const year = new Date().getFullYear();
   return (
-    <Box bg={bgColor}>
+    <Box bg={bgColor} w="full">
       <Container maxW="container.xl" py={6}>
         <VStack>
           <Text>© {year}، کلیه حقوق محفوظ است.</Text>

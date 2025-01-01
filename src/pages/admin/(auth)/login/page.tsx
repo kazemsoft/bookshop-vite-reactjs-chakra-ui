@@ -3,22 +3,19 @@ import { Button } from "@components/ui/button";
 import { ColorModeButton } from "@components/ui/color-mode";
 import { Field } from "@components/ui/field";
 import { useForm } from "react-hook-form";
-import { useSignInMutation } from "@hooks/mutations/auth/useSignInMutation";
 import { useNavigate } from "react-router";
 import { toaster } from "@components/ui/toaster";
-import { useTranslation } from "react-i18next";
-import LanguageSwitcher from "@components/ui/language-switcher";
 import appStore from "@stores/appStore";
+import { usePostLogin } from "@hooks/mutations/auth/usePostLogin";
 
 export default function LoginPage() {
   const version = import.meta.env.PACKAGE_VERSION || "0.0.0";
-  const login = useSignInMutation();
+  const login = usePostLogin();
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const setTokens = appStore((state) => state.setTokens);
 
   type TFormData = {
-    email: string;
+    identifier: string;
     password: string;
   };
 
@@ -29,30 +26,30 @@ export default function LoginPage() {
     handleSubmit,
   } = useForm<TFormData>({
     defaultValues: {
-      email: "",
+      identifier: "",
       password: "",
     },
   });
 
   function onSubmit(data: TFormData) {
+    const { identifier, password } = data;
     login.mutate(
-      { email: data.email, password: data.password },
+      { identifier, password },
       {
-        onSuccess({ access_token, id_token, refresh_token }) {
-          setTokens({
-            accessToken: access_token,
-            refreshToken: refresh_token,
-            idToken: id_token,
-          });
-          navigate("/dashboard");
+        onSuccess({ token, message }) {
+          setTokens(token);
+          navigate("/admin");
+          toaster.create({ description: message, type: "success" });
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onError: (error: any) => {
+        onError: (
+          error: Error & {
+            response?: { data?: { message?: string } };
+          }
+        ) => {
           toaster.create({
-            title: t("login.loginError"),
-            description:
-              error?.response?.data?.error_description ||
-              t("login.invalidCredential"),
+            title: "خطا!",
+            description: error?.response?.data?.message || "دسترسی نامعتبر",
             type: "error",
           });
           reset();
@@ -63,38 +60,34 @@ export default function LoginPage() {
 
   return (
     <VStack gap={4} w="full" maxW="sm">
-      <Heading>{t("login.welcome")}</Heading>
+      <Heading>خوش برگشتید!</Heading>
       <Text color="gray.400" fontSize="xs" textAlign="center">
-        {t("login.subtitle")}
+        برای ورود به حساب کاربری خود اطلاعات زیر را وارد کنید
       </Text>
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
         <VStack gap={4}>
           <Field
-            label={t("login.email")}
+            label={"ایمیل یا نام کاربری"}
             mt={6}
-            invalid={!!errors.email}
-            errorText={errors.email?.message || t("login.invalidEmail")}
+            invalid={!!errors.identifier}
+            errorText={errors.identifier?.message || "ایمیل نامعتبر است"}
           >
             <Input
-              {...register("email", {
-                pattern: {
-                  value:
-                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                  message: t("login.invalidEmail"),
-                },
+              {...register("identifier", {
+                required: "ایمیل یا نام کاربری الزامی است",
               })}
               autoComplete="email"
             />
           </Field>
           <Field
-            label={t("login.password")}
+            label={"رمز عبور"}
             invalid={!!errors.password}
             errorText={errors.password?.message}
           >
             <Input
               type="password"
               {...register("password", {
-                required: t("login.invalidPassword"),
+                required: "رمز عبور الزامی است",
               })}
               autoComplete="current-password"
             />
@@ -103,21 +96,19 @@ export default function LoginPage() {
             w="full"
             type="submit"
             loading={login.isPending}
-            loadingText={t("login.inProgressLoginText")}
+            loadingText={"در حال ورود..."}
             disabled={login.isPending}
           >
-            {t("login.loginText")}
+            ورود
           </Button>
         </VStack>
       </form>
       <HStack w="full" justify="space-between">
         <Text opacity={0.2} fontSize="sm">
-          {t("login.version")} {version}
+          نسخه {version}
         </Text>
-        <HStack>
-          <ColorModeButton />
-          <LanguageSwitcher />
-        </HStack>
+
+        <ColorModeButton />
       </HStack>
     </VStack>
   );

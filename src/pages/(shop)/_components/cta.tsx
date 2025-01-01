@@ -4,6 +4,7 @@ import { GrUser } from "react-icons/gr";
 import { PiShoppingCartSimpleBold } from "react-icons/pi";
 import { HStack, IconButton } from "@chakra-ui/react";
 import { ColorModeButton } from "@components/ui/color-mode";
+import { Link } from "react-router";
 
 export default function CTA() {
   return (
@@ -12,14 +13,16 @@ export default function CTA() {
         <IoLibraryOutline />
         کتابخانه من
       </Button>
-      <IconButton
-        variant="subtle"
-        aria-label="ورود"
-        size="xl"
-        display={["none", "none", "flex"]}
-      >
-        <GrUser />
-      </IconButton>
+      <Link to="/admin">
+        <IconButton
+          variant="subtle"
+          aria-label="ورود"
+          size="xl"
+          display={["none", "none", "flex"]}
+        >
+          <GrUser />
+        </IconButton>
+      </Link>
       <IconButton
         variant="subtle"
         aria-label="ورود"
