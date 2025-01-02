@@ -1,14 +1,43 @@
 import { Card, HStack, IconButton, Input, Table } from "@chakra-ui/react";
 import { Avatar } from "@components/ui/avatar";
 import { useColorModeValue } from "@components/ui/color-mode";
+import { ProgressBar, ProgressRoot } from "@components/ui/progress";
+import { toaster } from "@components/ui/toaster";
+import { useDeleteAuthor } from "@hooks/mutations/authors/useDeleteAuthor";
 import useGetAuthors from "@hooks/queries/useGetAuthors";
+import { useDebounce } from "@hooks/useDebounce";
+import { useEffect, useId, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { AiOutlineEdit } from "react-icons/ai";
+import { Link, useNavigate, useSearchParams } from "react-router";
+import { queryClient } from "src/queryClient";
 
 export default function AuthorsList() {
+  const id = useId();
   const bgColor = useColorModeValue("#F2EDE6", "#322E2B");
   const authors = useGetAuthors();
-  console.log(authors.data);
+  const deleteAuthor = useDeleteAuthor();
+  async function handleDeleteAuthor(id: number) {
+    deleteAuthor.mutate(
+      { authorId: id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["authors"] });
+        },
+      }
+    );
+  }
+  const [searchParams] = useSearchParams();
+  const q = searchParams.get("q");
+  const [search, setSearch] = useState(q || "");
+  const navigate = useNavigate();
+
+  const searchAfterSeconds = useDebounce(search, 500);
+
+  useEffect(() => {
+    searchParams.set("q", searchAfterSeconds);
+    navigate({ search: searchParams.toString() });
+  }, [searchAfterSeconds, navigate, searchParams]);
 
   return (
     <Card.Root bg={bgColor}>
@@ -19,9 +48,21 @@ export default function AuthorsList() {
         w="full"
       >
         <Card.Title>لیست نویسندگان موجود:</Card.Title>
-        <Input bg="bg.subtle" placeholder="جستجو نویسنده ..." w="150px" />
+        <Input
+          bg="bg.subtle"
+          placeholder="جستجو نویسنده ..."
+          w="150px"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </Card.Header>
       <Card.Body>
+        <ProgressRoot
+          value={authors.isLoading || authors.isFetching ? null : 0}
+          h={1}
+        >
+          <ProgressBar />
+        </ProgressRoot>
         <Table.ScrollArea borderWidth="1px" rounded="md" height="full">
           <Table.Root size="sm" stickyHeader>
             <Table.Header>
@@ -44,11 +85,29 @@ export default function AuthorsList() {
                   <Table.Cell>{author.name}</Table.Cell>
                   <Table.Cell textAlign="end">
                     <HStack gap={2} justify="flex-end">
+                      <Link to={`/admin/authors/edit/${author.id}`}>
+                        <IconButton size="sm" variant="subtle">
+                          <AiOutlineEdit size={20} />
+                        </IconButton>
+                      </Link>
                       <IconButton size="sm" variant="subtle">
-                        <AiOutlineEdit size={20} />
-                      </IconButton>
-                      <IconButton size="sm" variant="subtle">
-                        <AiOutlineDelete size={20} />
+                        <AiOutlineDelete
+                          onClick={() => {
+                            toaster.create({
+                              id,
+                              title: "حذف نویسنده",
+                              description: "آیا از حذف نویسنده مطمئن هستید؟!",
+                              type: "warning",
+                              action: {
+                                label: "بله",
+                                onClick: () => {
+                                  handleDeleteAuthor(author.id);
+                                },
+                              },
+                            });
+                          }}
+                          size={20}
+                        />
                       </IconButton>
                     </HStack>
                   </Table.Cell>
