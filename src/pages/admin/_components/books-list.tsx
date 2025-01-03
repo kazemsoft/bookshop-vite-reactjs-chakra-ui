@@ -89,7 +89,7 @@ export default function BooksList() {
                   <Table.Cell>{book.title}</Table.Cell>
                   <Table.Cell>{book.Author.name}</Table.Cell>
                   <Table.Cell>
-                    {formatPrice(Number(book.price) * 1000)} تومان
+                    {formatPrice(Number(book.price))} تومان
                   </Table.Cell>
                   <Table.Cell textAlign="end">
                     <HStack gap={2} justify="flex-end">

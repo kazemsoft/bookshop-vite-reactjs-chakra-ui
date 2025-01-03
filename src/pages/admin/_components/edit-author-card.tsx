@@ -27,7 +27,9 @@ export default function EditAuthorForm({ author }: { author: TAuthor }) {
       { id: author.id, name, imageUrl },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["author", author.id] });
+          queryClient.invalidateQueries({
+            queryKey: ["author", String(author.id)],
+          });
           toaster.success({ description: "نویسنده با موفقیت ویرایش شد" });
           setTimeout(() => {
             navigator("/admin/authors");

@@ -10,7 +10,7 @@ import AdminPage from "@pages/admin/page";
 import AuthrosPage from "@pages/admin/authors/page";
 import EditAuthor from "@pages/admin/authors/edit/[:authorId]/page";
 import BooksPage from "@pages/admin/books/page";
-import EditBook from "@pages/admin/books/edit/[:authorId]/page";
+import EditBook from "@pages/admin/books/edit/[:bookId]/page";
 
 export default function AppRoutes() {
   const isAuth = appStore((state) => state.token);

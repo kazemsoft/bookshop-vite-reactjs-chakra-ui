@@ -14,7 +14,7 @@ export default function BookSidebar() {
         <Skeleton loading={book.isLoading}>
           {book.data?.price && (
             <Text fontSize="xl" fontWeight={900}>
-              {formatPrice(Number(book.data.price) * 1000)} تومان
+              {formatPrice(Number(book.data.price))} تومان
             </Text>
           )}
         </Skeleton>

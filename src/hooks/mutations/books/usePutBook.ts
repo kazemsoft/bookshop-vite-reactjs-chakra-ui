@@ -1,7 +1,14 @@
 import restAPI from "@api/index";
 import { useMutation } from "@tanstack/react-query";
 
-type TProps = MakeOptional<TBook, "id">;
+type TProps = {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  imageUrl: string | null;
+  authorId: number;
+};
 
 export function usePutBook() {
   return useMutation({

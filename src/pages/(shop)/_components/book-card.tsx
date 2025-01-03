@@ -22,9 +22,7 @@ export default function BookCard({ book }: TProps) {
           <Card.Title fontSize="sm" textAlign="center">
             {book.title}
           </Card.Title>
-          <Text fontWeight={900}>
-            {formatPrice(Number(book.price) * 1000)} تومان
-          </Text>
+          <Text fontWeight={900}>{formatPrice(Number(book.price))} تومان</Text>
         </Card.Body>
       </Card.Root>
     </Link>
