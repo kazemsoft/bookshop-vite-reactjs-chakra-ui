@@ -1,4 +1,5 @@
 type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [P in K]?: T[P] };
+type RemoveAttribute<T, K extends keyof T> = Omit<T, K>;
 
 type TAuthor = {
   id: number;

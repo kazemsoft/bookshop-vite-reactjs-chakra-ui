@@ -9,6 +9,8 @@ import AdminLayout from "@pages/admin/layout";
 import AdminPage from "@pages/admin/page";
 import AuthrosPage from "@pages/admin/authors/page";
 import EditAuthor from "@pages/admin/authors/edit/[:authorId]/page";
+import BooksPage from "@pages/admin/books/page";
+import EditBook from "@pages/admin/books/edit/[:authorId]/page";
 
 export default function AppRoutes() {
   const isAuth = appStore((state) => state.token);
@@ -26,6 +28,10 @@ export default function AppRoutes() {
         <Route path="authors">
           <Route path="" element={<AuthrosPage />} />
           <Route path="edit/:authorId" element={<EditAuthor />} />
+        </Route>
+        <Route path="books">
+          <Route path="" element={<BooksPage />} />
+          <Route path="edit/:bookId" element={<EditBook />} />
         </Route>
         <Route path="login" element={<LoginPage />} />
       </Route>

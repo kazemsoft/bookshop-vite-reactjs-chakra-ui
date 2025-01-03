@@ -20,7 +20,7 @@ export default function AddAuthorCard() {
   function onSubmit(author: { name: string; imageUrl?: string }) {
     postAuthor.mutate(author, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["authors"] });
+        queryClient.invalidateQueries({ queryKey: ["authors", ""] });
         reset();
       },
     });

@@ -51,6 +51,7 @@ export const globalCss = defineGlobalStyles({
     padding: 0,
     height: "full",
     width: "full",
+    direction:"rtl"
   },
   "#root": {
     height: "full",
