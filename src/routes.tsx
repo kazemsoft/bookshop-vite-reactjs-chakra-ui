@@ -33,7 +33,7 @@ export default function AppRoutes() {
           <Route path="" element={<BooksPage />} />
           <Route path="edit/:bookId" element={<EditBook />} />
         </Route>
-        <Route path="login" element={<LoginPage />} />
+        <Route path="login" element={isAuth?<Navigate to="/admin" />:<LoginPage />} />
       </Route>
     </Routes>
   );

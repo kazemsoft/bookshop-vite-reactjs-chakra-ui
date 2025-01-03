@@ -38,7 +38,7 @@ export default function LoginPage() {
       {
         onSuccess({ token, message }) {
           setTokens(token);
-          navigate("/admin");
+          setTimeout(() => navigate("/admin"), 1000);
           toaster.create({ description: message, type: "success" });
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

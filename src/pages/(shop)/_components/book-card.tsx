@@ -14,7 +14,7 @@ export default function BookCard({ book }: TProps) {
           <Image
             w="120px"
             h="auto"
-            src={book.imageUrl || ""}
+            src={book.imageUrl || "/images/default-image.svg"}
             alt={book.title}
             borderRadius="md"
             boxShadow="md"
