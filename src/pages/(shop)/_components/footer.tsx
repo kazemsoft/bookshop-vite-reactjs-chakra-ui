@@ -10,7 +10,7 @@ export default function Footer() {
         <VStack>
           <Text>© {year}، کلیه حقوق محفوظ است.</Text>
           <Text fontSize="xs">
-            طراحی و اجرا توسط دانشجو: عرشیا تاجیک. استاد راهنما: پژمان حسینیون
+            طراحی و اجرا توسط دانشجو: نام دانشجو. استاد راهنما: نام استاد
           </Text>
         </VStack>
       </Container>
